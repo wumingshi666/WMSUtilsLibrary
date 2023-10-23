@@ -59,7 +59,8 @@ object WMSPermissionUtil {
      * 权限常量类
      *
      */
-    object Permission {/*    Android应用权限大全（Manifest.permission）_leekey_sjtu的博客-CSDN博客
+    object Permission {
+        /*    Android应用权限大全（Manifest.permission）_leekey_sjtu的博客-CSDN博客
     https://blog.csdn.net/qq_37689207/article/details/128753304*/
 
 
@@ -171,13 +172,13 @@ object WMSPermissionUtil {
     /**
      * Initialize
      *
-     *传入MainActivity
+     *传入MainActivity,只是为了简化函数调用不需要每次都传参初始化一次即可
      * @param activity
      * @return 返回自身方便赋值简短命名
      */
     fun initialize(activity: ComponentActivity): WMSPermissionUtil {
         Config.activity = activity
-        return WMSPermissionUtil
+        return this
     }
 
     /**

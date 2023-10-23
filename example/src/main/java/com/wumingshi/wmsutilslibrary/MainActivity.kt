@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,10 +28,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.util.Consumer
+import com.wumingshi.wmsutilslibrary.exts.loge
 import com.wumingshi.wmsutilslibrary.ui.theme.WMSUtilsLibraryTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.Locale
+import kotlin.random.Random
 
 const val TAG = "TAG"
 
@@ -48,6 +55,9 @@ class MainActivity : ComponentActivity() {
                         Divider()
                         TestGetRealPath()
                         Divider()
+                        TestDate()
+                        Divider()
+                        TestAppLog()
                     }
 
                 }
@@ -162,6 +172,73 @@ fun TestGetRealPath() {
                 showText = "路径=${file?.path}"
             }) {
                 Text(text = "获取真实路径")
+            }
+        }
+    }
+}
+
+
+@Composable
+fun TestDate() {
+    Box {
+        Button(onClick = {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                WMSDateUtil.dateFormat(WMSDateUtil.Format.FORMAT_DATE_1, LocalDateTime.now())
+                    .loge()
+                WMSDateUtil.dateFormat(WMSDateUtil.Format.FORMAT_DATE_8, LocalDate.now())
+                    .loge()
+                WMSDateUtil.dateFormat(WMSDateUtil.Format.FORMAT_DATE_3, LocalDateTime.now()).loge()
+            }
+            WMSDateUtil.getLocalDateTimeMilliseconds().loge()
+            SimpleDateFormat(
+                WMSDateUtil.Format.FORMAT_DATE_3,
+                Locale.getDefault()
+            ).format(System.currentTimeMillis()).loge()
+
+
+        }) {
+            Text(text = "打印日期")
+
+        }
+    }
+}
+
+
+@Composable
+fun TestAppLog() {
+    val current = LocalContext.current
+
+    var isInit by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(Unit) {
+        if (!WMSAppLogUtil.config.isInit) {
+            if (!WMSPermissionUtil.isGrantedPermissions(arrayOf(WMSPermissionUtil.Permission.WRITE_EXTERNAL_STORAGE)))
+                return@LaunchedEffect
+            WMSAppLogUtil.apply {
+                config.apply {
+                    switchFile = true
+                    stackDeep = 1
+                    filePath = Environment.getExternalStorageDirectory().resolve("logs")
+                        .also { it.mkdirs() }
+
+                }
+            }.initialize(current.applicationContext)
+            isInit=WMSAppLogUtil.config.isInit
+        }
+    }
+
+
+
+    Box {
+        Column {
+            Text(text = if (isInit) WMSAppLogUtil.getFile().path else "未初始化")
+            Button(onClick = {
+                WMSAppLogUtil.e("日志测试:${('a'..'z').random()}=${Random.nextInt()}")
+            }) {
+                Text(text = "打印日志")
+
             }
         }
     }

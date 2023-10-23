@@ -1,6 +1,7 @@
 Android kotlin 工具库
 
 ## 使用方法
+
 **暂时先不发布到jitpack上了**
 **直接Releases WMSUtilsLibrary-debug.aar**
 
@@ -13,7 +14,6 @@ dependencyResolutionManagement {
         maven("https://jitpack.io")
     }
 }
-
 
 
 //implementation("com.github.wumingshi666:WMSUtilsLibrary:v1.0.1")
@@ -78,7 +78,38 @@ dependencyResolutionManagement {
   requestPermissions      ->请求多个权限
   ```
 
+
+- [WMSAppLogUtil](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSAppLogUtil.kt) -> [Demo](example/src/main/java/com/wumingshi/wmsutilslibrary/MainActivity.kt#L207)
+
+- ```
+  config                  ->日志配置项
+  d                       ->d级别
+  e                       ->e级别
+  getFile                 ->获取当前日志文件
+  i                       ->i级别
+  initialize              ->初始化
+  v                       ->
+  w                       ->
+  ```
+
+  - Config
+
+  - ```
+    charset               ->日志文件编码
+    filePath              ->日志文件目录
+    head                  ->日志文件头信息
+    isInit                ->是否初始化成功(创建文件)
+    stackDeep             ->堆栈深度
+    switchConsole         ->控制台开关
+    switchFile            ->文件开关
+    switchHead            ->头信息开关
+    switchLog             ->总开关
+    tag                   ->TAG
+    tagD                  ->
+    tagE                  ->
+    tagI                  ->
+    tagV                  ->
+    tagW                  ->
+    ```
+
   
-
-
-
