@@ -41,8 +41,7 @@ class MainActivity : ComponentActivity() {
             WMSUtilsLibraryTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
                         TestRequestPermission()
@@ -66,7 +65,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TestRequestPermission() {
+
+
     val ca = LocalContext.current as ComponentActivity
+    val permissionUtil = WMSPermissionUtil.initialize(ca)
+
     val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         arrayOf(
             WMSPermissionUtil.Permission.MANAGE_EXTERNAL_STORAGE,
@@ -81,47 +84,46 @@ fun TestRequestPermission() {
     }
 
     val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
-                data = Uri.fromParts(
-                    "package", ca.application.packageName, null
-                )
-            }
-        } else {
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.fromParts("package", ca.application.packageName, null)
-            }
+        Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+            data = Uri.fromParts(
+                "package", ca.application.packageName, null
+            )
         }
+    } else {
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", ca.application.packageName, null)
+        }
+    }
 
-    var mIsGranted by remember { mutableStateOf(WMSPermissionUtil.isGrantedPermissions(ca, permissions)) }
+    var mIsGranted by remember {
+        mutableStateOf(
+            permissionUtil.isGrantedPermissions(
+                ca, permissions
+            )
+        )
+    }
     var mShowText by remember { mutableStateOf(if (mIsGranted) "已有权限" else "未授予权限") }
 
     Box {
         Row(modifier = Modifier.fillMaxWidth()) {
             Text(text = "$mShowText=$mIsGranted")
             Button(onClick = {
-                with(ca) {
-                    WMSPermissionUtil.requestPermissions(this, permissions) { map ->
-
-                        mIsGranted =
-                            map.values.all { it } || WMSPermissionUtil.isGrantedPermissions(
-                                this,
-                                permissions
-                            )
-                        mShowText = if (mIsGranted) "全部同意授权" else "个别或全部拒绝授权"
-                        if (!mIsGranted && !WMSPermissionUtil.isDeniedUIPermissions(
-                                this,
-                                permissions
-                            )
-                        ) {
-                            mShowText = "个别永久拒绝授权"
-                            WMSPermissionUtil.gotoPermissionsSettings(this, intent = intent) {
-                                mIsGranted = WMSPermissionUtil.isGrantedPermissions(this, permissions)
-                                mShowText = if (mIsGranted) "手动授权" else "手动拒绝授权"
-                            }
+                WMSPermissionUtil.requestPermissions(permissions) { map ->
+                    mIsGranted = map.values.all { it } || WMSPermissionUtil.isGrantedPermissions(
+                        permissions
+                    )
+                    mShowText = if (mIsGranted) "全部同意授权" else "个别或全部拒绝授权"
+                    if (!mIsGranted && !WMSPermissionUtil.isDeniedUIPermissions(
+                            permissions
+                        )
+                    ) {
+                        mShowText = "个别永久拒绝授权"
+                        WMSPermissionUtil.gotoPermissionsSettings(intent = intent) {
+                            mIsGranted = WMSPermissionUtil.isGrantedPermissions(permissions)
+                            mShowText = if (mIsGranted) "手动授权" else "手动拒绝授权"
                         }
                     }
                 }
-
             }) {
                 Text(text = "申请权限")
             }
@@ -148,7 +150,7 @@ fun TestGetRealPath() {
     LaunchedEffect(intent) {
         launch(Dispatchers.IO) {
             file = intent.data?.let {
-                showText="已有意图点击获取"
+                showText = "已有意图点击获取"
                 WMSUriUtil.uriToFile(ca, it)
             }
         }
@@ -157,7 +159,7 @@ fun TestGetRealPath() {
         Column {
             Text(text = showText)
             Button(onClick = {
-                showText="路径=${file?.path}"
+                showText = "路径=${file?.path}"
             }) {
                 Text(text = "获取真实路径")
             }

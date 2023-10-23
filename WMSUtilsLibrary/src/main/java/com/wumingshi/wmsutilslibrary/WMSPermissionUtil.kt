@@ -34,9 +34,32 @@ shouldShowRequestPermissionRationale根据先前权限请求中的用户首选�
 //跳转该App的系统设置页面Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 
 // 在当前文件的顶层定义扩展函数
+
+/**
+ * permission util
+ * 请求权限工具类
+ *
+ */
 object WMSPermissionUtil {
-    object Permission {
-        /*    Android应用权限大全（Manifest.permission）_leekey_sjtu的博客-CSDN博客
+
+
+    /**
+     * Config
+     * 工具类配置项,如果更多配置可以考虑公开配置类.apply设置,少量的配置属性直接initialize
+     *
+     * @constructor Create empty Config
+     */
+    private object Config {
+        var activity: ComponentActivity? = null
+    }
+
+    /**
+     * Permission
+     *
+     * 权限常量类
+     *
+     */
+    object Permission {/*    Android应用权限大全（Manifest.permission）_leekey_sjtu的博客-CSDN博客
     https://blog.csdn.net/qq_37689207/article/details/128753304*/
 
 
@@ -146,6 +169,45 @@ object WMSPermissionUtil {
     }
 
     /**
+     * Initialize
+     *
+     *传入MainActivity
+     * @param activity
+     * @return 返回自身方便赋值简短命名
+     */
+    fun initialize(activity: ComponentActivity): WMSPermissionUtil {
+        Config.activity = activity
+        return WMSPermissionUtil
+    }
+
+    /**
+     * Check initialized
+     *
+     * 检查初始化
+     * @return
+     */
+    private fun checkInitialized(): Config {//直接使用非空断言,以后如果统一风格或扩展再用这个
+        if (Config.activity == null) {
+            throw NullPointerException("Activity not initialized")
+        }
+        return Config
+    }
+
+
+    /**
+     * Request permission
+     *
+     * 简化函数需先调用 initialize 具体说明看重载函数
+     * @param permission
+     * @param callback
+     * @receiver
+     */
+    fun requestPermission(
+        permission: String,
+        callback: (isGranted: Boolean, isDenied: Boolean) -> Unit,
+    ) = requestPermission(Config.activity!!, permission, callback)
+
+    /**
      *
      * 请求单个权限
      *
@@ -159,7 +221,6 @@ object WMSPermissionUtil {
         permission: String,
         callback: (isGranted: Boolean, isDenied: Boolean) -> Unit,
     ) {
-
         activity.startContractForResultWMS(
             ActivityResultContracts.RequestPermission(), permission
         ) {
@@ -170,6 +231,17 @@ object WMSPermissionUtil {
         }
     }
 
+
+    /**
+     * Request permissions
+     *
+     * 简化函数需先调用 initialize 具体说明看重载函数
+     * @param permissions
+     * @param callback
+     * @receiver
+     */
+    fun requestPermissions(permissions: Array<String>, callback: (Map<String, Boolean>) -> Unit) =
+        requestPermissions(Config.activity!!, permissions, callback)
 
     /**
      * 请求多个权限，可以自行遍历权限是否全部同意或用isGrantedPermissions。
@@ -199,6 +271,20 @@ object WMSPermissionUtil {
 
     /**
      * Goto permissions settings
+     *
+     * 简化函数需先调用 initialize 具体说明看重载函数
+     * @param intent
+     * @param callback
+     * @receiver
+     */
+    fun gotoPermissionsSettings(
+        intent: Intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", Config.activity!!.application.packageName, null)
+        }, callback: (ActivityResult) -> Unit
+    ) = gotoPermissionsSettings(Config.activity!!, intent, callback)
+
+    /**
+     * Goto permissions settings
      * 跳到对应的权限设置
      *
      * @param activity
@@ -214,13 +300,22 @@ object WMSPermissionUtil {
         callback: (ActivityResult) -> Unit
     ) {
         WMSActivityUtil.startIntent(
-            activity,
-            intent
+            activity, intent
         ) {
             callback(it)
         }
     }
 
+
+    /**
+     * Is denied u i permission
+     *
+     * 简化函数需先调用 initialize 具体说明看重载函数
+     *
+     * @param permission
+     */
+    fun isDeniedUIPermission(permission: String) =
+        isDeniedUIPermission(Config.activity!!, permission)
 
     /**
      * Is denied permission
@@ -239,6 +334,17 @@ object WMSPermissionUtil {
     }
 
     /**
+     * Is denied u i permissions
+     *
+     * 简化函数需先调用 initialize 具体说明看重载函数
+     * @param permission
+     * @return
+     */
+    fun isDeniedUIPermissions(
+        permission: Array<String>
+    ) = isDeniedUIPermissions(Config.activity!!, permission)
+
+    /**
      * Is denied permissions
      *
      * 检查是否永久拒绝权限(就是是否显示权限UI)
@@ -250,8 +356,7 @@ object WMSPermissionUtil {
      */
     fun isDeniedUIPermissions(
         activity: ComponentActivity, permission: Array<String>
-    ): Boolean {
-        /*permission.forEach {
+    ): Boolean {/*permission.forEach {
            with(activity) {
                 if (!isGrantedPermission(this, it)){
                    return isDeniedPermission(this, it)
@@ -264,6 +369,16 @@ object WMSPermissionUtil {
 
 
     }
+
+
+    /**
+     * Is granted permission
+     *
+     * 简化函数需先调用 initialize 具体说明看重载函数
+     * @param permission
+     * @return
+     */
+    fun isGrantedPermission(permission: String) = isGrantedPermission(Config.activity!!, permission)
 
     /**
      * Check self permission
@@ -280,6 +395,15 @@ object WMSPermissionUtil {
         }
         return activity.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
     }
+
+    /**
+     * Is granted permissions
+     *
+     * 简化函数需先调用 initialize 具体说明看重载函数
+     * @param permission
+     */
+    fun isGrantedPermissions(permission: Array<String>) =
+        isGrantedPermissions(Config.activity!!, permission)
 
     /**
      * Is granted permissions
