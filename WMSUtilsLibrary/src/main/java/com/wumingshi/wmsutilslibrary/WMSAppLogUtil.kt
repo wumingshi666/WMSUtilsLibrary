@@ -45,7 +45,7 @@ Log.e(tag, msg) - error级别,输出错误信息
  * 可以自己创建也可以获取单例
  * @constructor Create empty W m s log util
  */
-class WMSAppLogUtil {
+class WMSAppLogUtil : WMSBaseUtil() {
 
     /**
      * 日志配置类
@@ -139,17 +139,10 @@ class WMSAppLogUtil {
 
     }
 
-    /**
-     * 是否初始化,会创建文件的顺带看看有没有权限
-     */
-    val isInit: Boolean get() = mIsInit
+
     val config = Config()
 
 
-
-
-    private var mIsInit: Boolean = false
-    private lateinit var mContext: Application
     private lateinit var mFile: File
 
     //日志文件携程作用域
@@ -167,17 +160,16 @@ class WMSAppLogUtil {
      *
      */
     fun initialize(application: Application = WMSAppUtil.getApplicationByReflect()): WMSAppLogUtil {
-        this.mContext = application
-        config.filePath = config.filePath ?: mContext.getExternalFilesDir(null)?.resolve("logs")
+        this.mApplication = application
+        config.filePath = config.filePath ?: mApplication.getExternalFilesDir(null)?.resolve("logs")
         config.head = config.head
             ?: ("****** Log Head ******\n" + "日志路径:${config.filePath?.path}\n" + "****** Log End ******\n")
         config.filePath?.let {
             if (!it.exists()) it.mkdirs()
         }
 
-
         mFile = File(
-            config.filePath, "${WMSDateUtil.getLocalDate()}-${mContext.packageName}.txt"
+            config.filePath, "${WMSDateUtil.getLocalDate()}-${mApplication.packageName}.txt"
         )
 
         if (mFile.exists()) {
@@ -189,9 +181,7 @@ class WMSAppLogUtil {
         return this
     }
 
-    private fun checkInitialized() {//直接使用非空断言,以后如果统一风格或扩展再用这个
 
-    }
 
     /**
      * Get file

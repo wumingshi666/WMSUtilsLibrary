@@ -40,7 +40,7 @@ shouldShowRequestPermissionRationale根据先前权限请求中的用户首选�
  * 请求权限工具类
  *
  */
-object WMSPermissionUtil {
+object WMSPermissionUtil : WMSBaseUtil() {
     /**
      * Config
      * 工具类配置项,如果更多配置可以考虑公开配置类.apply设置,少量的配置属性直接initialize
@@ -52,15 +52,6 @@ object WMSPermissionUtil {
 
     }
 
-
-    /**
-     * 是否初始化
-     */
-    val isInit: Boolean get() = mIsInit
-
-
-
-    private var mIsInit: Boolean = false
 
     /**
      * Initialize
@@ -81,11 +72,10 @@ object WMSPermissionUtil {
      * 检查初始化
      * @return
      */
-    private fun checkInitialized(): Config {//直接使用非空断言,以后如果统一风格或扩展再用这个
+    override fun checkInitialized() {//直接使用非空断言,以后如果统一风格或扩展再用这个
         if (Config.activity == null) {
             throw NullPointerException("Activity not initialized")
         }
-        return Config
     }
 
 
@@ -338,19 +328,13 @@ object WMSPermissionUtil {
     }
 
 
-
-
-
-
-
     /**
      * Permission
      *
      * 权限常量类
      *
      */
-    object Permission {
-        /*    Android应用权限大全（Manifest.permission）_leekey_sjtu的博客-CSDN博客
+    object Permission {/*    Android应用权限大全（Manifest.permission）_leekey_sjtu的博客-CSDN博客
     https://blog.csdn.net/qq_37689207/article/details/128753304*/
 
 
@@ -458,8 +442,6 @@ object WMSPermissionUtil {
         //NFC权限
         const val NFC = Manifest.permission.NFC
     }
-
-
 
 
 }

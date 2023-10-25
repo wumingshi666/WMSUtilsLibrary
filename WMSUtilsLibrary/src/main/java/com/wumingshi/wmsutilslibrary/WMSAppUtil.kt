@@ -18,6 +18,7 @@ import com.wumingshi.wmsutilslibrary.exts.deleteDirectoryAll
  *
  */
 object WMSAppUtil {
+
     @SuppressLint("PrivateApi")
     fun getApplicationByReflect(): Application {
         lateinit var application: Application

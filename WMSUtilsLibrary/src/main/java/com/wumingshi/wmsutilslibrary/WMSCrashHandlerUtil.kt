@@ -11,7 +11,7 @@ import android.util.Log
  *
  */
 
-object WMSCrashHandlerUtil : Thread.UncaughtExceptionHandler {
+object WMSCrashHandlerUtil : WMSBaseUtil(), Thread.UncaughtExceptionHandler {
 
     object Config {
         var tag = "GlobalExceptionHandler"
@@ -44,7 +44,7 @@ object WMSCrashHandlerUtil : Thread.UncaughtExceptionHandler {
     /**
      * 是否初始化,会创建文件的顺带看看有没有权限
      */
-    val isInit: Boolean get() = mIsInit
+
     val config = Config
 
     /**
@@ -64,11 +64,10 @@ object WMSCrashHandlerUtil : Thread.UncaughtExceptionHandler {
      *
      * 原始的默认处理程序
      */
-    val defaultHandler get() = mThrowable
+    val defaultHandler get() = mDefaultHandler
 
 
-    private var mIsInit: Boolean = false
-    private lateinit var mContext: Application
+
     private var mDefaultHandler: Thread.UncaughtExceptionHandler? = null
 
     private var mThrowable: Throwable? = null
@@ -79,15 +78,12 @@ object WMSCrashHandlerUtil : Thread.UncaughtExceptionHandler {
      *
      * @param application
      */
-    fun initialize(application: Application) {
-        this.mContext = application
+    fun initialize(application: Application): WMSCrashHandlerUtil {
+        this.mApplication = application
         this.mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler(this)
         mIsInit = true
-    }
-
-    private fun checkInitialized() {//直接使用非空断言,以后如果统一风格或扩展再用这个
-
+        return this
     }
 
     override fun uncaughtException(t: Thread, e: Throwable) {

@@ -63,6 +63,18 @@ dependencyResolutionManagement {
 
 -------------------------------------
 
+- [WMSBaseUtil](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSBaseUtil.kt) -> [Demo](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSPermissionUtil.kt)
+- 基础工具类,主要用于少创建一些相同的变量和重写toString
+- ```
+  isInit                  ->是否初始化
+  toString                ->会打印是否初始化和引用
+  checkInitialized        ->检查初始化(默认无实现代码规则定义) (protected 修饰)
+  initialize              ->初始化(默认无实现代码规则定义) (protected 修饰)
+  mApplication            ->application默认延迟初始化 (protected 修饰)
+  mIsInit                 ->内部是否初始化(protected 修饰)
+  ```
+
+
 - [WMSPermissionUtil](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSPermissionUtil.kt) -> [Demo](example/src/main/java/com/wumingshi/wmsutilslibrary/MainActivity.kt#L76)
 - 权限请求
 - ```
