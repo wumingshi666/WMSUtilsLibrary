@@ -63,10 +63,8 @@ dependencyResolutionManagement {
 
 -------------------------------------
 
-- [WMSPermissionUtil](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSPermissionUtil.kt) -> [Demo](example/src/main/java/com/wumingshi/wmsutilslibrary/MainActivity.kt#L68)
-
+- [WMSPermissionUtil](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSPermissionUtil.kt) -> [Demo](example/src/main/java/com/wumingshi/wmsutilslibrary/MainActivity.kt#L76)
 - 权限请求
-
 - ```
   gotoPermissionsSettings ->根据意图调到APP设置或其他设置
   isDeniedUIPermission    ->检查一个权限是否显示权限请求UI
@@ -79,9 +77,11 @@ dependencyResolutionManagement {
   ```
 
 
-- [WMSAppLogUtil](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSAppLogUtil.kt) -> [Demo](example/src/main/java/com/wumingshi/wmsutilslibrary/MainActivity.kt#L207)
-
+- [WMSAppLogUtil](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSAppLogUtil.kt) -> [Demo](example/src/main/java/com/wumingshi/wmsutilslibrary/MainActivity.kt#L82)
+- 简单日志工具类
 - ```
+  isInit                  ->是否初始化
+  instance                ->单例对象
   config                  ->日志配置项
   d                       ->d级别
   e                       ->e级别
@@ -91,25 +91,43 @@ dependencyResolutionManagement {
   v                       ->
   w                       ->
   ```
-
   - Config
-
   - ```
-    charset               ->日志文件编码
-    filePath              ->日志文件目录
-    head                  ->日志文件头信息
-    isInit                ->是否初始化成功(创建文件)
-    stackDeep             ->堆栈深度
-    switchConsole         ->控制台开关
-    switchFile            ->文件开关
-    switchHead            ->头信息开关
-    switchLog             ->总开关
-    tag                   ->TAG
-    tagD                  ->
-    tagE                  ->
-    tagI                  ->
-    tagV                  ->
-    tagW                  ->
+    isInit                  ->是否初始化
+    charset                 ->日志文件编码
+    filePath                ->日志文件目录
+    head                    ->日志文件头信息
+    isInit                  ->是否初始化成功(创建文件)
+    stackDeep               ->堆栈深度
+    switchConsole           ->控制台开关
+    switchFile              ->文件开关
+    switchHead              ->头信息开关
+    switchLog               ->总开关
+    tag                     ->TAG
+    tagD                    ->
+    tagE                    ->
+    tagI                    ->
+    tagV                    ->
+    tagW                    ->
     ```
 
+
+
+- [WMSCrashHandlerUtil](WMSUtilsLibrary/src/main/java/com/wumingshi/wmsutilslibrary/WMSCrashHandlerUtil.kt) -> [Demo](example/src/main/java/com/wumingshi/wmsutilslibrary/MainActivity.kt#L84)
+- 简单全局异常类 demo里的代码非主线程相关的异常可以不蹦
+- ```
+  config                  ->
+  defaultHandler          ->原始默认的处理程序
+  initialize              ->初始化
+  isInit                  ->是否初始化
+  throwable               ->异常
+  throwableString         ->异常全部字符串
+  uncaughtException       ->未捕获异常回调
+  ```
+  - Config
+  - ```
+    callBack              ->未铺货异常处理回调(可以在这里记录异常)
+    tag                   ->异常TAG
+    ```
+  
   
