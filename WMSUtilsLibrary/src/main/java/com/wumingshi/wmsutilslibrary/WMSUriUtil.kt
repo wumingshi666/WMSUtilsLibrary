@@ -29,11 +29,7 @@ object WMSUriUtil {
      */
     var copyMaxSize: Long = 100 * 1024 * 1024 // 100MB
 
-    private object Error {
-        const val FILE_NOT_EXIST = "文件不存在"
-        const val FILE_IS_NULL = "获取失败,结果是null"
-        const val FILE_NOT_EXIST_AND_NULL = "函数结束,文件不存在而且所有结果是null"
-    }
+
 
     /**
      * Uri 转 file 如果无法获取到就写到缓存
@@ -129,8 +125,8 @@ object WMSUriUtil {
      *
      */
     private fun getRealPathForExternalStorageUri(uri: Uri, context: Context): String? {
-        var code: Int = 4000
-        var file: File?
+        var code = 4000
+        val file: File?
         if (DocumentsContract.isDocumentUri(
                 context, uri
             ) && uri.authority == "com.android.externalstorage.documents"
@@ -227,7 +223,7 @@ object WMSUriUtil {
     private fun getRealPathFromDocumentsIdUri(
         uri: Uri, context: Context
     ): String? {
-        var code: Int = 4000
+        var code = 4000
         var file: File? = null
         if (DocumentsContract.isDocumentUri(context, uri)) {
             code++
@@ -572,4 +568,12 @@ object WMSUriUtil {
 
 
     }
+
+
+    private object Error {
+        const val FILE_NOT_EXIST = "文件不存在"
+        const val FILE_IS_NULL = "获取失败,结果是null"
+        const val FILE_NOT_EXIST_AND_NULL = "函数结束,文件不存在而且所有结果是null"
+    }
+
 }

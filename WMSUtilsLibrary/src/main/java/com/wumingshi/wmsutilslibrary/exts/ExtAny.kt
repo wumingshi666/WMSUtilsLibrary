@@ -14,4 +14,4 @@ const val TAG = "TAG"
  * 简单loge控制台 方便调试 TAG="TAG"
  *
  */
-fun String.loge()=Log.e(TAG, this)
+fun Any.loge()=Log.e(TAG, this.toString())

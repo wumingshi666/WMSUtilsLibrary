@@ -41,8 +41,6 @@ shouldShowRequestPermissionRationale根据先前权限请求中的用户首选�
  *
  */
 object WMSPermissionUtil {
-
-
     /**
      * Config
      * 工具类配置项,如果更多配置可以考虑公开配置类.apply设置,少量的配置属性直接initialize
@@ -51,123 +49,18 @@ object WMSPermissionUtil {
      */
     private object Config {
         var activity: ComponentActivity? = null
+
     }
+
 
     /**
-     * Permission
-     *
-     * 权限常量类
-     *
+     * 是否初始化
      */
-    object Permission {
-        /*    Android应用权限大全（Manifest.permission）_leekey_sjtu的博客-CSDN博客
-    https://blog.csdn.net/qq_37689207/article/details/128753304*/
+    val isInit: Boolean get() = mIsInit
 
 
-        /**
-         * Read Media Images
-         * 读取媒体图片  大于安卓13
-         */
-        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-        const val READ_MEDIA_IMAGES = Manifest.permission.READ_MEDIA_IMAGES
 
-        /**
-         * Read Media AUDIO
-         * 读取媒体音频  大于安卓13
-         */
-        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-        const val READ_MEDIA_AUDIO = Manifest.permission.READ_MEDIA_AUDIO
-
-        /**
-         * Read Media VIDEO
-         * 读取媒体视频  大于安卓13
-         */
-        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-        const val READ_MEDIA_VIDEO = Manifest.permission.READ_MEDIA_VIDEO
-
-        /**
-         * Read Media Visual User Selected
-         * 读取所选媒体视觉对象用户 大于安卓14
-         */
-        @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-        const val READ_MEDIA_VISUAL_USER_SELECTED =
-            Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
-
-
-        /**
-         * 读存储权限 小于安卓13
-         * @see
-         */
-        const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
-
-        /**
-         * 写存储权限 小于安卓11
-         */
-        const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
-
-        @RequiresApi(Build.VERSION_CODES.R)
-        /**
-         * 此权限的检查用 Environment.isExternalStorageManager()  checkSelfPermission封装了他
-         * 此权限的申请用 Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION) 需要跳到设置里手动开启
-         * 需要重写 默认的 call 自行跳转 自行检查权限
-         */
-        const val MANAGE_EXTERNAL_STORAGE = Manifest.permission.MANAGE_EXTERNAL_STORAGE
-
-
-        // 位置权限
-        const val ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
-        const val ACCESS_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
-
-        // 相机权限
-        const val CAMERA = Manifest.permission.CAMERA
-
-        // 录音权限麦克风权限
-        const val RECORD_AUDIO = Manifest.permission.RECORD_AUDIO
-
-        // 联系人权限
-        const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
-        const val WRITE_CONTACTS = Manifest.permission.WRITE_CONTACTS
-
-        // 日历权限
-        const val READ_CALENDAR = Manifest.permission.READ_CALENDAR
-        const val WRITE_CALENDAR = Manifest.permission.WRITE_CALENDAR
-
-        // SMS权限
-        const val READ_SMS = Manifest.permission.READ_SMS
-        const val SEND_SMS = Manifest.permission.SEND_SMS
-        const val RECEIVE_SMS = Manifest.permission.RECEIVE_SMS
-
-        // 电话权限
-        const val READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE
-        const val CALL_PHONE = Manifest.permission.CALL_PHONE
-        const val READ_CALL_LOG = Manifest.permission.READ_CALL_LOG
-        const val WRITE_CALL_LOG = Manifest.permission.WRITE_CALL_LOG
-
-        // 系统权限
-        const val INSTALL_PACKAGES = Manifest.permission.INSTALL_PACKAGES
-        const val DELETE_PACKAGES = Manifest.permission.DELETE_PACKAGES
-        const val SYSTEM_ALERT_WINDOW = Manifest.permission.SYSTEM_ALERT_WINDOW
-
-        // 开机启动权限
-        const val RECEIVE_BOOT_COMPLETED = Manifest.permission.RECEIVE_BOOT_COMPLETED
-
-        // 辅助功能权限
-        const val BIND_ACCESSIBILITY_SERVICE = Manifest.permission.BIND_ACCESSIBILITY_SERVICE
-
-        // 有背景活动权限
-        @RequiresApi(Build.VERSION_CODES.P)
-        const val FOREGROUND_SERVICE = Manifest.permission.FOREGROUND_SERVICE
-
-        // VPN权限
-        const val BIND_VPN_SERVICE = Manifest.permission.BIND_VPN_SERVICE
-
-        //WiFi权限
-        const val CHANGE_WIFI_STATE = Manifest.permission.CHANGE_WIFI_STATE
-        const val ACCESS_WIFI_STATE = Manifest.permission.ACCESS_WIFI_STATE
-
-        //NFC权限
-        const val NFC = Manifest.permission.NFC
-    }
+    private var mIsInit: Boolean = false
 
     /**
      * Initialize
@@ -178,6 +71,7 @@ object WMSPermissionUtil {
      */
     fun initialize(activity: ComponentActivity): WMSPermissionUtil {
         Config.activity = activity
+        this.mIsInit = true
         return this
     }
 
@@ -442,6 +336,130 @@ object WMSPermissionUtil {
         }
         callback(map)
     }
+
+
+
+
+
+
+
+    /**
+     * Permission
+     *
+     * 权限常量类
+     *
+     */
+    object Permission {
+        /*    Android应用权限大全（Manifest.permission）_leekey_sjtu的博客-CSDN博客
+    https://blog.csdn.net/qq_37689207/article/details/128753304*/
+
+
+        /**
+         * Read Media Images
+         * 读取媒体图片  大于安卓13
+         */
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        const val READ_MEDIA_IMAGES = Manifest.permission.READ_MEDIA_IMAGES
+
+        /**
+         * Read Media AUDIO
+         * 读取媒体音频  大于安卓13
+         */
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        const val READ_MEDIA_AUDIO = Manifest.permission.READ_MEDIA_AUDIO
+
+        /**
+         * Read Media VIDEO
+         * 读取媒体视频  大于安卓13
+         */
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        const val READ_MEDIA_VIDEO = Manifest.permission.READ_MEDIA_VIDEO
+
+        /**
+         * Read Media Visual User Selected
+         * 读取所选媒体视觉对象用户 大于安卓14
+         */
+        @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+        const val READ_MEDIA_VISUAL_USER_SELECTED =
+            Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+
+
+        /**
+         * 读存储权限 小于安卓13
+         * @see
+         */
+        const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
+
+        /**
+         * 写存储权限 小于安卓11
+         */
+        const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+        @RequiresApi(Build.VERSION_CODES.R)
+        /**
+         * 此权限的检查用 Environment.isExternalStorageManager()  checkSelfPermission封装了他
+         * 此权限的申请用 Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION) 需要跳到设置里手动开启
+         * 需要重写 默认的 call 自行跳转 自行检查权限
+         */
+        const val MANAGE_EXTERNAL_STORAGE = Manifest.permission.MANAGE_EXTERNAL_STORAGE
+
+
+        // 位置权限
+        const val ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
+        const val ACCESS_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
+
+        // 相机权限
+        const val CAMERA = Manifest.permission.CAMERA
+
+        // 录音权限麦克风权限
+        const val RECORD_AUDIO = Manifest.permission.RECORD_AUDIO
+
+        // 联系人权限
+        const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
+        const val WRITE_CONTACTS = Manifest.permission.WRITE_CONTACTS
+
+        // 日历权限
+        const val READ_CALENDAR = Manifest.permission.READ_CALENDAR
+        const val WRITE_CALENDAR = Manifest.permission.WRITE_CALENDAR
+
+        // SMS权限
+        const val READ_SMS = Manifest.permission.READ_SMS
+        const val SEND_SMS = Manifest.permission.SEND_SMS
+        const val RECEIVE_SMS = Manifest.permission.RECEIVE_SMS
+
+        // 电话权限
+        const val READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE
+        const val CALL_PHONE = Manifest.permission.CALL_PHONE
+        const val READ_CALL_LOG = Manifest.permission.READ_CALL_LOG
+        const val WRITE_CALL_LOG = Manifest.permission.WRITE_CALL_LOG
+
+        // 系统权限
+        const val INSTALL_PACKAGES = Manifest.permission.INSTALL_PACKAGES
+        const val DELETE_PACKAGES = Manifest.permission.DELETE_PACKAGES
+        const val SYSTEM_ALERT_WINDOW = Manifest.permission.SYSTEM_ALERT_WINDOW
+
+        // 开机启动权限
+        const val RECEIVE_BOOT_COMPLETED = Manifest.permission.RECEIVE_BOOT_COMPLETED
+
+        // 辅助功能权限
+        const val BIND_ACCESSIBILITY_SERVICE = Manifest.permission.BIND_ACCESSIBILITY_SERVICE
+
+        // 有背景活动权限
+        @RequiresApi(Build.VERSION_CODES.P)
+        const val FOREGROUND_SERVICE = Manifest.permission.FOREGROUND_SERVICE
+
+        // VPN权限
+        const val BIND_VPN_SERVICE = Manifest.permission.BIND_VPN_SERVICE
+
+        //WiFi权限
+        const val CHANGE_WIFI_STATE = Manifest.permission.CHANGE_WIFI_STATE
+        const val ACCESS_WIFI_STATE = Manifest.permission.ACCESS_WIFI_STATE
+
+        //NFC权限
+        const val NFC = Manifest.permission.NFC
+    }
+
+
 
 
 }
