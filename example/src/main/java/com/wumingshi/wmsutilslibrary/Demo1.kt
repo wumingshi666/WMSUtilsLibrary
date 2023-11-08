@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -129,6 +130,7 @@ fun TestGetRealPath() {
     LaunchedEffect(intent) {
         launch(Dispatchers.IO) {
             file = intent.data?.let {
+                Log.e(TAG, "TestGetRealPath: $it")
                 showText = "已有意图点击获取"
                 WMSUriUtil.uriToFile(ca, it)
             }

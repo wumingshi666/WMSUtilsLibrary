@@ -334,6 +334,9 @@ object WMSUriUtil {
      * 从其他APP里打开uri的获取路径
      * 暂时未增加太多APP
      *
+     * 华为 文件管理器music文件夹
+     * content://com.huawei.filemanager.share.fileprovider/root/storage/emulated/0/Music/1699469167079-output.mp4
+     *
      * IDM+
      * content://idm.internet.download.manager.plus.provider/external_files/IDMP
      *
@@ -351,7 +354,8 @@ object WMSUriUtil {
             "/external/",
             "/external_path/",
             //content://idm.internet.download.manager.plus.provider/external_files/IDMP
-            "/external_files/"
+            "/external_files/",
+            "/root/"
         )
         val externalStorageDir = Environment.getExternalStorageDirectory().absolutePath
         uri.path?.let { path ->
@@ -365,13 +369,7 @@ object WMSUriUtil {
         return null
     }
 
-    /**
-     * 获取 uri 文件大小
-     *
-     * @param uri
-     * @param context
-     * @return byte = Long
-     */
+
     fun getUriSize(uri: Uri, context: Context): Long {
         if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
             return uriContentResolverQuery(context,
