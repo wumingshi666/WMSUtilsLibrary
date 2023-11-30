@@ -1,8 +1,10 @@
 package com.wumingshi.wmsutilslibrary.exts
 
+import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import androidx.appcompat.app.AppCompatActivity
+import android.view.Window
+import androidx.activity.ComponentActivity
 
 /**
  * @author 无名尸 WMS
@@ -17,8 +19,23 @@ import androidx.appcompat.app.AppCompatActivity
  * LocalContext.current.getActivity()
  * @return
  */
-fun Context.getActivity(): AppCompatActivity? = when (this) {
-    is AppCompatActivity -> this
+
+
+tailrec fun Context.getActivity(): Activity? = when (this) {
+    is Activity -> this
     is ContextWrapper -> baseContext.getActivity()
     else -> null
 }
+
+tailrec fun Context.getComponentActivity(): ComponentActivity? = when (this) {
+    is ComponentActivity -> this
+    is ContextWrapper -> baseContext.getComponentActivity()
+    else -> null
+}
+
+tailrec fun Context.getWindow(): Window? =
+    when (this) {
+        is Activity -> window
+        is ContextWrapper -> baseContext.getWindow()
+        else -> null
+    }
