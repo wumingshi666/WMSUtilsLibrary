@@ -46,6 +46,8 @@ Log.e(tag, msg) - error级别,输出错误信息
  * @constructor Create empty W m s log util
  */
 class WMSAppLogUtil : WMSBaseUtil() {
+    private val className = this.javaClass.name
+    private val packageName = this.javaClass.`package`?.name
 
     /**
      * 日志配置类
@@ -55,7 +57,6 @@ class WMSAppLogUtil : WMSBaseUtil() {
         /**
          * 是否初始化,会创建文件的顺带看看有没有权限
          */
-
 
 
         /**
@@ -130,7 +131,7 @@ class WMSAppLogUtil : WMSBaseUtil() {
         var switchFile = false  //文件开关
     }
 
-    companion object{
+    companion object {
         /**
          * Instance
          * 单例对象
@@ -151,8 +152,6 @@ class WMSAppLogUtil : WMSBaseUtil() {
         launch(Dispatchers.IO) {
         }
     }*/
-
-
 
 
     /**
@@ -180,7 +179,6 @@ class WMSAppLogUtil : WMSBaseUtil() {
         }
         return this
     }
-
 
 
     /**
@@ -211,9 +209,9 @@ class WMSAppLogUtil : WMSBaseUtil() {
      * @param string
      * @param ownStackDeep 自身的堆栈深度会被排除,如果是扩展函数或者再次封装会用到
      */
-    fun i(string: String = "",ownStackDeep: Int =2) {
+    fun i(string: String = "") {
         config.takeIf { it.switchLog }?.run {
-            val stack = getStackTraceString(ownStackDeep)
+            val stack = getStackTraceString()
             if (switchConsole) {
                 Log.i(tagI, "{$string : $stack}")
             }
@@ -230,9 +228,9 @@ class WMSAppLogUtil : WMSBaseUtil() {
      * @param string
      * @param ownStackDeep 自身的堆栈深度会被排除,如果是扩展函数或者再次封装会用到
      */
-    fun v(string: String = "",ownStackDeep: Int =2) {
+    fun v(string: String = "") {
         config.takeIf { it.switchLog }?.run {
-            val stack = getStackTraceString(ownStackDeep)
+            val stack = getStackTraceString()
             if (switchConsole) {
                 Log.v(tagV, "{$string : $stack}")
             }
@@ -248,9 +246,9 @@ class WMSAppLogUtil : WMSBaseUtil() {
      * @param string
      * @param ownStackDeep 自身的堆栈深度会被排除,如果是扩展函数或者再次封装会用到
      */
-    fun d(string: String = "",ownStackDeep: Int =2) {
+    fun d(string: String = "") {
         config.takeIf { it.switchLog }?.run {
-            val stack = getStackTraceString(ownStackDeep)
+            val stack = getStackTraceString()
             if (switchConsole) {
                 Log.d(tagD, "{$string : $stack}")
             }
@@ -266,9 +264,9 @@ class WMSAppLogUtil : WMSBaseUtil() {
      * @param string
      * @param ownStackDeep 自身的堆栈深度会被排除,如果是扩展函数或者再次封装会用到
      */
-    fun w(string: String = "",ownStackDeep: Int =2) {
+    fun w(string: String = "") {
         config.takeIf { it.switchLog }?.run {
-            val stack = getStackTraceString(ownStackDeep)
+            val stack = getStackTraceString()
             if (switchConsole) {
                 Log.w(tagW, "{$string : $stack}")
             }
@@ -284,9 +282,9 @@ class WMSAppLogUtil : WMSBaseUtil() {
      * @param string
      * @param ownStackDeep 自身的堆栈深度会被排除,如果是扩展函数或者再次封装会用到
      */
-    fun e(string: String = "",ownStackDeep: Int =2) {
+    fun e(string: String = "") {
         config.takeIf { it.switchLog }?.run {
-            val stack = getStackTraceString(ownStackDeep)
+            val stack = getStackTraceString()
             if (switchConsole) {
                 Log.e(tagE, "{$string : $stack}")
             }
@@ -341,13 +339,22 @@ class WMSAppLogUtil : WMSBaseUtil() {
      * @param tr
      * @return
      */
-    private fun getStackTraceString(tr: Throwable?,ownStackDeep: Int): String {
+    private fun getStackTraceString(tr: Throwable?): String {
         if (tr == null) {
             return ""
         }
+        /*var i = 0
+        val iterator = tr.iterator()
+        while (iterator.hasNext()) {
+            i++
+            val element = iterator.next()
+            if (element.className.contains(className)) {
+                break
+            }
+        }*/
         val stackDeep: Int = if (config.stackDeep == -1) {
             tr.stackTrace.size
-        } else ownStackDeep + config.stackDeep
+        } else 0 + config.stackDeep
 
 
         // This is to reduce the amount of log spew that apps do in the non-error
@@ -364,7 +371,7 @@ class WMSAppLogUtil : WMSBaseUtil() {
 
         if (tr.stackTrace.size >= stackDeep) {
             // 截取范围
-            tr.stackTrace = tr.stackTrace.copyOfRange(ownStackDeep, stackDeep)
+            tr.stackTrace = tr.stackTrace.copyOfRange(0, stackDeep)
         }
         tr.printStackTrace(pw)
         pw.flush()
@@ -377,12 +384,26 @@ class WMSAppLogUtil : WMSBaseUtil() {
      *
      * @return
      */
-    private fun getStackTraceString(ownStackDeep: Int): String {
+    private fun getStackTraceString(): String {
+
         val stackTrace = Throwable().stackTrace.let {
+            /*  it.filter { stackTraceElement ->
+                  stackTraceElement.className.contains(className)
+              }.toTypedArray()*/
+            var i = 1
+            val iterator = it.iterator()
+            while (iterator.hasNext()) {
+                i++
+                val element = iterator.next()
+                if (element.className.contains(this.className)) {
+                    break
+                }
+            }
+            //  Log.e("TAGAAAA", "i:${this.javaClass.`package`?.name} ")
             val stackDeep: Int = if (config.stackDeep == -1) {
                 it.size
-            } else ownStackDeep + config.stackDeep
-            it.copyOfRange(ownStackDeep, stackDeep)
+            } else i + config.stackDeep
+            it.copyOfRange(i.coerceIn(0, it.size), stackDeep.coerceIn(0, it.size))
         }/*Throwable().stackTrace.copyOfRange(ownStackDeep, stackDeep).drop(2)//删除自身堆栈
             .run {
                 if (config.stackDeep != -1) take(config.stackDeep) else this
@@ -397,16 +418,3 @@ class WMSAppLogUtil : WMSBaseUtil() {
 }
 
 
-/**
- * W m s app log util logi
- *
- * 简单的扩展函数方便 快速调用 可以自己扩展成比较短的函数名
- */
-fun Any.WMSAppLogUtilLogi() = WMSAppLogUtil.instance.i(this.toString(),3)
-
-/**
- * W m s app log util loge
- *
- * 简单的扩展函数方便 快速调用 可以自己扩展成比较短的函数名
- */
-fun Any.WMSAppLogUtilLoge() = WMSAppLogUtil.instance.e(this.toString(),3)

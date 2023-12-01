@@ -197,7 +197,7 @@ fun TestAppLog() {
             Text(text = if (isInit) WMSAppLogUtil.instance.getFile().path else "未初始化")
             Button(onClick = {
                 WMSAppLogUtil.instance.e("日志测试:${('a'..'z').random()}=${Random.nextInt()}")
-                "日志扩展函数测试".WMSAppLogUtilLogi()
+                "日志扩展函数测试".WMSAppLogUtilLoge()
                 666666.WMSAppLogUtilLoge()
                 'a'.WMSAppLogUtilLoge()
             }) {
@@ -208,6 +208,7 @@ fun TestAppLog() {
     }
 }
 
+private fun Any.WMSAppLogUtilLoge() = WMSAppLogUtil.instance.e(this.toString())
 
 @Composable
 fun TestCrash(nav: NavHostController = rememberNavController()) {
