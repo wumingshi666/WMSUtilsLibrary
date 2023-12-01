@@ -26,7 +26,7 @@ afterEvaluate {
             register<MavenPublication>("release") {
                 groupId = "com.github.wumingshi666"
                 artifactId = "WMSUtilsLibrary"
-                version = libs.versions.versionName.get()
+                version = "v1.0.2"// libs.versions.versionName.get()
 
                 afterEvaluate {
                     from(components["release"])
@@ -56,7 +56,7 @@ android {
 
     defaultConfig {
         minSdk = 24
-        version = libs.versions.versionName.get()
+        version = "v1.0.2"//libs.versions.versionName.get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }

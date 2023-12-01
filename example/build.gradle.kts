@@ -12,8 +12,8 @@ android {
         applicationId = "com.wumingshi.wmsutilslibrary"
         minSdk = 24
         targetSdk = 34
-        versionCode = libs.versions.versionCode.get().toInt()
-        versionName = libs.versions.versionName.get()
+        versionCode = 102
+        versionName = "v1.0.2"// libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
