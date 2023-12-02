@@ -332,6 +332,37 @@ class WMSAppLogUtil : WMSBaseUtil() {
     }
 
 
+
+
+    /**
+     * 获取栈信息
+     *
+     * @return
+     */
+    private fun getStackTraceString(): String {
+        Throwable().apply {
+            // 这里可以用过滤函数写，但是没有对应的扩展函数好像需要转Array，而且还有 break 所以就暂时这样写
+            stackTrace = stackTrace.let {
+                var i = 1
+                val iterator = it.iterator()
+                while (iterator.hasNext()) {
+                    i++
+                    val element = iterator.next()
+                    if (element.className.contains(this@WMSAppLogUtil.className)) {
+                        break
+                    }
+                }
+                val stackDeep: Int = if (config.stackDeep == -1) {
+                    it.size
+                } else i + config.stackDeep
+                it.copyOfRange(i.coerceIn(0, it.size), stackDeep.coerceIn(0, it.size))
+            }
+        }.let {
+            // 这里的返回可以考虑要不要去除 java.lang.Throwable
+            return Log.getStackTraceString(it)
+        }
+    }
+
     /**
      * Get stack trace string
      * 去掉自身栈
@@ -384,7 +415,7 @@ class WMSAppLogUtil : WMSBaseUtil() {
      *
      * @return
      */
-    private fun getStackTraceString(): String {
+    private fun bakGetStackTraceString(): String {
 
         val stackTrace = Throwable().stackTrace.let {
             /*  it.filter { stackTraceElement ->
